@@ -28,7 +28,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok' 
 	annotationProcessor 'org.projectlombok:lombok'
 
-	// Devtools (중복 제거 후 1개만 남김)
+	// Devtools
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 	// Test
