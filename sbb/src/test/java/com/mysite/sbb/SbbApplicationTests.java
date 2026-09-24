@@ -36,96 +36,13 @@ class SbbApplicationTests {
 	private UserRepository userRepository;
 
 	@Test
-	@Transactional
 	void testJpa() {
 
-//		SiteUser testUser = new SiteUser();
-//		testUser.setEmail("test@test.com");
-//		testUser.setPassword("123");
-//		testUser.setUsername("test");
-//		this.userRepository.save(testUser);
+    for (int i = 0; i < 100; i++) {
+			String subject = String.format("테스트 데이터입니다.:[%03d]", i);
+			String content = "내용무";
+			this.questionService.create(subject, content, null);
 
-		Optional<SiteUser> testUser = this.userRepository.findByusername("test");
-
-		if (testUser.isPresent()) {
-			SiteUser testUser2 = testUser.get();
-
-			Question question = new Question();
-			question.setSubject("Test Subject");
-			question.setContent("Test Content");
-			question.setCreateDate(LocalDateTime.now());
-			question.setAuthor(testUser2);
-			this.questionRepository.save(question);
-
-			Optional<Question> qOptional = this.questionRepository.findById(0);
-			if (qOptional.isPresent()) {
-				Question question2 = qOptional.get();
-				assertEquals("Test Subject", question2.getSubject());
-			} else {
-				System.out.println("Check Question DB");
-			}
-		} else {
-			System.out.println("Check User DB");
 		}
-
-//    	List<Question> all = this.questionRepository.findAll();
-//    	assertEquals(2, all.size());
-//    	
-//    	Question q = all.get(0);
-//    	assertEquals("sbb가 무엇인가요?", q.getSubject());
-
-//    	Optional<Question> oq = this.questionRepository.findById(1);
-//    	
-//    	if (oq.isPresent()) {
-//    		Question q = oq.get();
-//    		assertEquals("sbb가 무엇인가요?", q.getSubject());
-//    	}
-
-//    	Question q = this.questionRepository.findBySubject("sbb가 무엇인가요?");
-//    	assertEquals(1, q.getId());
-
-//    	Question q = questionRepository.findBySubjectAndContent("sbb는 무엇인가요?", "sbb에 대해서 알소 싶습니다.");
-//    	assertEquals(1, q.getId());
-
-//    	List<Question> qList = this.questionRepository.findBySubjectLike({"sbb%");
-//    	Question q = qList.get(0);
-//    	assertEquals("sbb가 무엇인가요?", q.getSubject());
-
-//    	Optional<Question> oq = this.questionRepository.findById(1);
-//    	assertTrue(oq.isPresent());
-//    	Question q = oq.get();
-//    	q.setSubject("수정된 제목");
-//    	this.questionRepository.save(q);
-
-//    	assertEquals(2, this.questionRepository.count());
-//    	Optional<Question> oq = this.questionRepository.findById(1);
-//    	assertTrue(oq.isPresent());
-//    	Question q = oq.get();
-//    	this.questionRepository.delete(q);
-//    	assertEquals(1, this.questionRepository.count());
-
-//    	Optional<Question> oq = this.questionRepository.findById(2);
-//    	assertTrue(oq.isPresent());
-//    	Question q = oq.get();
-//    	
-//    	Answer a = new Answer();
-//    	a.setContent("자동으로 생성됩니다.");
-//    	a.setQuestion(q);
-//    	a.setCreateDate(LocalDateTime.now());
-//    	this.answerRepository.save(a);
-
-//    	Optional<Answer> oa = this.answerRepository.findById(1);
-//    	assertTrue(oa.isPresent());
-//    	Answer a = oa.get();
-//    	assertEquals(2, a.getQuestion().getId());
-
-//		Optional<Question> oq = this.questionRepository.findById(2);
-//		assertTrue(oq.isPresent());
-//		Question q = oq.get();
-//
-//		List<Answer> aList = q.getAnswerList();
-//		assertEquals(1, aList.size());
-//		assertEquals("네 자동으로 생성됩니다.", aList.get(0).getContent());
-
 	}
 }

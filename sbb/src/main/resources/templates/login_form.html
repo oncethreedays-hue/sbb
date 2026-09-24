@@ -1,20 +1,77 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
-    <form th:action="@{/user/login}" method="post">
-        <div th:if="${param.error}">
-            <div class="alert alert-danger">
-                사용자ID 또는 비밀번호를 확인해 주세요.
-            </div>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="border-bottom py-2">로그인</h2>
+            
+            <!-- id="loginForm"이 반드시 있어야 합니다 -->
+            <form id="loginForm">
+                
+                <!-- 평소엔 숨겨져 있는 에러 메시지창 -->
+                <div id="errorAlert" class="alert alert-danger d-none" role="alert">
+                    사용자ID 또는 비밀번호를 확인해 주세요.
+                </div>
+
+                <div class="mb-3">
+                    <label for="username" class="form-label">사용자ID</label>
+                    <input type="text" id="username" class="form-control" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="password" class="form-label">비밀번호</label>
+                    <input type="password" id="password" class="form-control" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary w-100">로그인</button>
+            </form>
         </div>
-        <div class="mb-3">
-            <label for="username" class="form-label">사용자ID</label>
-            <input type="text" name="username" id="username" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">비밀번호</label>
-            <input type="password" name="password" id="password" class="form-control">
-        </div>
-        <button type="submit" class="btn btn-primary">로그인</button>
-    </form>
+    </div>
 </div>
+
+<!-- 스크립트 조각 추가 -->
+<script layout:fragment="script" type='text/javascript'>
+    document.getElementById('loginForm').addEventListener('submit', async function (event) {
+        event.preventDefault(); // 폼 기본 새로고침 동작 막기
+
+        const usernameInput = document.getElementById('username').value;
+        const passwordInput = document.getElementById('password').value;
+        const errorAlert = document.getElementById('errorAlert');
+
+        // 기존에 떠 있던 에러 창 숨기기
+        errorAlert.classList.add('d-none');
+
+        try {
+            // 스프링 부트 API 호출
+            const response = await fetch('/api/user/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: usernameInput,
+                    password: passwordInput
+                })
+            });
+
+            if (response.ok) {
+                // 토큰 받아오기
+                const data = await response.json();
+				                
+                // 브라우저 로컬 스토리지에 토큰 저장
+                localStorage.setItem('jwtToken', data.accessToken);
+				
+				console.log(data.username + "님 환영합니다!");
+                
+                alert('로그인 성공!');
+                window.location.href = '/'; // 메인 페이지로 이동
+            } else {
+                // 로그인 실패 시 빨간색 경고창 띄우기
+                errorAlert.classList.remove('d-none');
+            }
+        } catch (error) {
+            console.error('통신 오류:', error);
+            errorAlert.classList.remove('d-none');
+        }
+    });
+</script>
 </html>

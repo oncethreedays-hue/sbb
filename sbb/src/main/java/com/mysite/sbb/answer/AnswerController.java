@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.mysite.sbb.question.Question;
+import com.mysite.sbb.question.QuestionDetailDto;
+import com.mysite.sbb.question.QuestionDto;
 import com.mysite.sbb.question.QuestionService;
 import com.mysite.sbb.user.SiteUser;
 import com.mysite.sbb.user.UserService;
@@ -39,13 +41,14 @@ public class AnswerController {
 		SiteUser siteUser = this.userService.getUser(pricipal.getName());
 
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("question", question);
+			QuestionDetailDto questionDetailDto = new QuestionDetailDto(question);
+			model.addAttribute("question", questionDetailDto);
 			return "question_detail";
 
 		}
 		Answer answer = this.answerService.create(question, answerForm.getContent(), siteUser);
 
-		return String.format("redirect:/question/detail/%s#answer_%s", id, answer.getId());
+		return String.format("redirect:/question/detail/%s#answer_%s", answer.getQuestion().getId(), answer.getId());
 	}
 
 	@PreAuthorize("isAuthenticated()")
