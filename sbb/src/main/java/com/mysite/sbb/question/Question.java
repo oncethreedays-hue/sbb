@@ -17,12 +17,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Question {
 	
 	@Id
@@ -47,4 +49,17 @@ public class Question {
 	
 	@ManyToMany
 	Set<SiteUser> voter;
+	
+	public Question(String subject, String content, SiteUser author) {
+		this.subject = subject;
+		this.content = content;
+		this.author = author;
+		this.createDate = LocalDateTime.now();
+	}
+	
+	public void update(String subject, String content) {
+		this.subject = subject;
+		this.content = content;
+		this.modifyDate = LocalDateTime.now();
+	}
 }
