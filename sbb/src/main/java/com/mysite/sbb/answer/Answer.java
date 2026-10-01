@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 import com.mysite.sbb.question.Question;
-import com.mysite.sbb.user.SiteUser;
+import com.mysite.sbb.user.entity.SiteUser;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

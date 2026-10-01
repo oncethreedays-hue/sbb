@@ -1,6 +1,8 @@
 package com.mysite.sbb.answer;
 
 import com.mysite.sbb.user.UserService;
+import com.mysite.sbb.user.entity.SiteUser;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -8,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.mysite.sbb.DataNotFoundException;
 import com.mysite.sbb.question.Question;
-import com.mysite.sbb.user.SiteUser;
 
 import lombok.RequiredArgsConstructor;
 

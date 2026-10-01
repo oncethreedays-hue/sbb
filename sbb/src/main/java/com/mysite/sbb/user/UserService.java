@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.mysite.sbb.DataNotFoundException;
 import com.mysite.sbb.jwt.JwtTokenProvider;
 import com.mysite.sbb.user.dto.UserLoginResponseDto;
+import com.mysite.sbb.user.entity.SiteUser;
+import com.mysite.sbb.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +24,7 @@ public class UserService {
 	public SiteUser create(String username, String email, String password) {
 
 		String encodedPassword = passwordEncoder.encode(password);
-		SiteUser user = new SiteUser(username, encodedPassword, email);
+		SiteUser user = new SiteUser(username, encodedPassword, email, UserRole.USER);
 		this.userRepository.save(user);
 		return user;
 	}

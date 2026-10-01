@@ -17,8 +17,8 @@ import com.mysite.sbb.answer.AnswerRepository;
 import com.mysite.sbb.question.Question;
 import com.mysite.sbb.question.QuestionRepository;
 import com.mysite.sbb.question.QuestionService;
-import com.mysite.sbb.user.SiteUser;
-import com.mysite.sbb.user.UserRepository;
+import com.mysite.sbb.user.entity.SiteUser;
+import com.mysite.sbb.user.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

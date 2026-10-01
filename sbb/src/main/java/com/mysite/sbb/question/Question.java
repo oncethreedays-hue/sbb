@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.mysite.sbb.answer.Answer;
-import com.mysite.sbb.user.SiteUser;
+import com.mysite.sbb.user.entity.SiteUser;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

@@ -1,7 +1,11 @@
-package com.mysite.sbb.user;
+package com.mysite.sbb.user.entity;
+
+import com.mysite.sbb.user.UserRole;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,11 +33,15 @@ public class SiteUser {
 
 	@Column
 	private String refreshToken;
+	
+	@Enumerated(EnumType.STRING)
+	private UserRole role;
 
-	public SiteUser(String username, String password, String email) {
+	public SiteUser(String username, String password, String email, UserRole role) {
 		this.username = username;
 		this.password = password;
 		this.email = email;
+		this.role = role;
 	}
 
 	public void updateRefreshToken(String refreshToken) {
