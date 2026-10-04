@@ -12,7 +12,6 @@ import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -31,9 +30,9 @@ public class SiteUser {
 	@Column(unique = true)
 	private String email;
 
-	@Column
+	@Column(length = 512)
 	private String refreshToken;
-	
+
 	@Enumerated(EnumType.STRING)
 	private UserRole role;
 

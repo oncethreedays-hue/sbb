@@ -1,9 +1,9 @@
-package com.mysite.sbb.answer;
+package com.mysite.sbb.answer.entity;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import com.mysite.sbb.question.Question;
+import com.mysite.sbb.question.entity.Question;
 import com.mysite.sbb.user.entity.SiteUser;
 
 import jakarta.persistence.Column;

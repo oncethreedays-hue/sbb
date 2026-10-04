@@ -8,5 +8,5 @@ import com.mysite.sbb.user.entity.SiteUser;
 
 public interface UserRepository extends JpaRepository<SiteUser, Long>{
 	
-	Optional<SiteUser> findByusername(String username);
+	Optional<SiteUser> findByUsername(String username);
 }

@@ -12,8 +12,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.mysite.sbb.DataNotFoundException;
-import com.mysite.sbb.answer.Answer;
+import com.mysite.sbb.answer.entity.Answer;
 import com.mysite.sbb.question.dto.QuestionResponseDto;
+import com.mysite.sbb.question.entity.Question;
+import com.mysite.sbb.question.repository.QuestionRepository;
 import com.mysite.sbb.user.entity.SiteUser;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -31,16 +33,17 @@ public class QuestionService {
 	private final QuestionRepository questionRepository;
 
 	public Page<QuestionResponseDto> getList(int page, String kw) {
-		List<Sort.Order> sorts = new ArrayList<>();
-		sorts.add(Sort.Order.desc("createDate"));
-		Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-
-		Specification<Question> spec = search(kw);
-		Page<Question> questionPage = this.questionRepository.findAll(spec, pageable);
-
-		Page<QuestionResponseDto> questionDtoPage = questionPage.map(QuestionResponseDto::new);
-
-		return questionDtoPage;
+//		List<Sort.Order> sorts = new ArrayList<>();
+//		sorts.add(Sort.Order.desc("createDate"));
+//		Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+//
+//		Specification<Question> spec = search(kw);
+//		Page<Question> questionPage = this.questionRepository.findAll(spec, pageable);
+//
+//		Page<QuestionResponseDto> questionDtoPage = questionPage.map(QuestionResponseDto::new);
+//
+//		return questionDtoPage;
+		return null;
 
 	}
 

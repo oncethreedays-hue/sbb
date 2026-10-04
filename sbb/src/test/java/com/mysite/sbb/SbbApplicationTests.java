@@ -12,11 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.User;
 
-import com.mysite.sbb.answer.Answer;
 import com.mysite.sbb.answer.AnswerRepository;
-import com.mysite.sbb.question.Question;
-import com.mysite.sbb.question.QuestionRepository;
+import com.mysite.sbb.answer.entity.Answer;
 import com.mysite.sbb.question.QuestionService;
+import com.mysite.sbb.question.entity.Question;
+import com.mysite.sbb.question.repository.QuestionRepository;
 import com.mysite.sbb.user.entity.SiteUser;
 import com.mysite.sbb.user.repository.UserRepository;
 

@@ -1,7 +1,7 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.4.2' // 4.1.0에서 안정적인 3.x 버전으로 수정
-	id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.springframework.boot' version '3.4.2'
+    id 'io.spring.dependency-management' version '1.1.7'    
 }
 
 group = 'com.example'
@@ -19,14 +19,19 @@ repositories {
 }
 
 dependencies {
+    // Lombok
+	compileOnly 'org.projectlombok:lombok' 
+	annotationProcessor 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+	
+	// MyBatis Spring Boot Starte
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.5'
+	
 	// Web, JPA, H2
 	implementation 'org.springframework.boot:spring-boot-starter-web' // webmvc 대신 표준 starter-web 사용
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' 
 	runtimeOnly 'com.h2database:h2'
-
-	// Lombok
-	compileOnly 'org.projectlombok:lombok' 
-	annotationProcessor 'org.projectlombok:lombok'
 
 	// Devtools
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -55,9 +60,11 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+	
+	
 
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
