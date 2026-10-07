@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -17,9 +19,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -54,8 +56,10 @@ public class SecurityConfig {
 				.formLogin((formLogin) -> formLogin.disable()).httpBasic((httpBasic) -> httpBasic.disable())
 
 				// 6. 요청 경로별 권한 설정
-				.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-						.requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
+				.authorizeHttpRequests(auth -> auth.requestMatchers("/h2-console/**", "/error").permitAll()
+						.requestMatchers("/api/user/login", "/api/user/signup", "/api/user/refresh").permitAll()
+						.requestMatchers(HttpMethod.GET, "/api/questions/**").permitAll().anyRequest().authenticated())
+				.exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
 				// 7. UsernamePasswordAuthenticationFilter 전에 커스텀 JwtFilter를 먼저 실행하도록 등록
 				.addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 		;

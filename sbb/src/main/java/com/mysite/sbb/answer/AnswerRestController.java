@@ -18,7 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.mysite.sbb.answer.dto.AnswerRequestDto;
 import com.mysite.sbb.answer.dto.AnswerResponseDto;
 import com.mysite.sbb.answer.entity.Answer;
-import com.mysite.sbb.question.QuestionService;
+import com.mysite.sbb.question.service.QuestionService;
 import com.mysite.sbb.question.entity.Question;
 import com.mysite.sbb.user.service.UserService;
 import com.mysite.sbb.user.entity.SiteUser;
@@ -40,12 +40,13 @@ public class AnswerRestController {
 	public ResponseEntity<AnswerResponseDto> createAnswer(@PathVariable("questionId") Integer questionId,
 			@Valid @RequestBody AnswerRequestDto requestDto, Principal principal) {
 
-		Question question = this.questionService.getQuestion(questionId);
-		SiteUser siteUser = this.userService.getUser(principal.getName());
-
-		Answer answer = this.answerService.create(question, requestDto.getContent(), siteUser);
-
-		return ResponseEntity.status(HttpStatus.CREATED).body(new AnswerResponseDto(answer));
+//		Question question = this.questionService.getQuestion(questionId);
+//		SiteUser siteUser = this.userService.getUser(principal.getName());
+//
+//		Answer answer = this.answerService.create(question, requestDto.getContent(), siteUser);
+//
+//		return ResponseEntity.status(HttpStatus.CREATED).body(new AnswerResponseDto(answer));
+		return null;
 	}
 
 	@PreAuthorize("isAuthenticated()")

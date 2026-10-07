@@ -1,6 +1,5 @@
 package com.mysite.sbb.question.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -49,7 +48,8 @@ public class QuestionServiceImpl implements QuestionService {
 	}
 
 	private Question findQuestion(Integer id) {
-		return questionRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "question not found"));
+		return questionRepository.findById(id)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "question not found"));
 	}
 
 	@Override
