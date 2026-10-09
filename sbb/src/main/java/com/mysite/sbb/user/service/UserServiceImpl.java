@@ -57,14 +57,26 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public String reissue(String refreshToken) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'reissue'");
+		if (!jwtTokenProvider.validateToken(refreshToken) || !jwtTokenProvider.isRefreshToken(refreshToken)) {
+			throw invalidRefreshToken();
+		}
+		String username = jwtTokenProvider.getUsernameFromToken(refreshToken);
+		SiteUser user = userRepository.findByUsername(username).orElseThrow(this::invalidRefreshToken);
+
+		if (!refreshToken.equals(user.getRefreshToken())) {
+			throw invalidRefreshToken();
+		}
+		return jwtTokenProvider.createAccessToken(username);
+	}
+
+	private ResponseStatusException invalidRefreshToken() {
+		return new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh Token이 유효하지 않습니다. 다시 로그인 해주세요.");
 	}
 
 	@Override
+	@Transactional
 	public void logout(String username) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'logout'");
+		userRepository.findByUsername(username).ifPresent(u -> u.updateRefreshToken(null));
 	}
 
 }

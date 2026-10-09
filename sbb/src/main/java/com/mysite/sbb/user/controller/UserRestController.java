@@ -48,12 +48,12 @@ public class UserRestController {
 			error.put("password2", "2개의 패스워드가 일치하지 않습니다.");
 			return ResponseEntity.badRequest().body(error);
 		}
-		
+
 		try {
 			userService.create(requestDto.getUsername(), requestDto.getEmail(), requestDto.getPassword1());
 			return ResponseEntity.status(HttpStatus.CREATED).body("회원 가입이 완료 되었습니다.");
-			
-		} catch (DataIntegrityViolationException  e) { 
+
+		} catch (DataIntegrityViolationException e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 등록된 사용자입니다.");
 		} catch (Exception e) {
