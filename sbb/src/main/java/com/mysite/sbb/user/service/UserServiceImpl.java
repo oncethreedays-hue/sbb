@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.mysite.sbb.DataNotFoundException;
+import com.mysite.sbb.global.exception.DataNotFoundException;
 import com.mysite.sbb.jwt.JwtTokenProvider;
 import com.mysite.sbb.user.UserRole;
 import com.mysite.sbb.user.dto.UserLoginResponseDto;

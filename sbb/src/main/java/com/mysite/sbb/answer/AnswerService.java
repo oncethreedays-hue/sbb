@@ -8,8 +8,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.mysite.sbb.DataNotFoundException;
 import com.mysite.sbb.answer.entity.Answer;
+import com.mysite.sbb.global.exception.DataNotFoundException;
 import com.mysite.sbb.question.entity.Question;
 
 import lombok.RequiredArgsConstructor;
