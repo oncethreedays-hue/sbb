@@ -124,7 +124,7 @@ class QuestionRestControllerTest {
 
 	@Test
 	@DisplayName("POST 등록: 201 + Location 헤더, DB 저장 확인")
-	void createValiationFail() throws Exception {
+	void create() throws Exception {
 		mockMvc.perform(post("/api/questions").with(user("writer")).with(csrf()).contentType(MediaType.APPLICATION_JSON)
 				.content(Json("세 제목", "새 내용"))).andExpect(status().isCreated())
 				.andExpect(header().string("Location", org.hamcrest.Matchers.startsWith("/api/questions/")));
