@@ -1,4 +1,4 @@
-package com.mysite.sbb;
+package com.mysite.sbb.global.config;
 
 import com.mysite.sbb.jwt.JwtFilter;
 import com.mysite.sbb.jwt.JwtTokenProvider;

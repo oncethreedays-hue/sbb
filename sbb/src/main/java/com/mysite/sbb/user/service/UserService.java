@@ -1,5 +1,6 @@
 package com.mysite.sbb.user.service;
 
+import com.mysite.sbb.user.dto.UserDetailDto;
 import com.mysite.sbb.user.dto.UserLoginResponseDto;
 
 public interface UserService {
@@ -11,5 +12,7 @@ public interface UserService {
 	String reissue(String refreshToken);
 
 	void logout(String username);
+	
+	UserDetailDto getMyDetail(String username);
 
 }

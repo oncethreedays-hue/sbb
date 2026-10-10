@@ -13,8 +13,11 @@ import org.springframework.web.server.ResponseStatusException;
 import com.mysite.sbb.global.exception.DataNotFoundException;
 import com.mysite.sbb.jwt.JwtTokenProvider;
 import com.mysite.sbb.user.UserRole;
+import com.mysite.sbb.user.dto.UserDetailDto;
 import com.mysite.sbb.user.dto.UserLoginResponseDto;
+import com.mysite.sbb.user.dto.UserSummaryRow;
 import com.mysite.sbb.user.entity.SiteUser;
+import com.mysite.sbb.user.mapper.UserMapper;
 import com.mysite.sbb.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,8 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final JwtTokenProvider jwtTokenProvider;
+	private static final int RECENT_LIMIT = 5;
+	private final UserMapper userMapper;
 
 	@Override
 	@Transactional
@@ -77,6 +82,12 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public void logout(String username) {
 		userRepository.findByUsername(username).ifPresent(u -> u.updateRefreshToken(null));
+	}
+
+	@Override
+	public UserDetailDto getMyDetail(String username) {
+		UserSummaryRow s = userMapper.findSummaryByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
+		return new UserDetailDto(s.getUsername(), s.getEmail(), s.getQuestionCount(), s.getAnswerCount(), userMapper.findRecentQuestion(s.getId(), RECENT_LIMIT), userMapper.findRecentAnswer(s.getId(), RECENT_LIMIT));
 	}
 
 }

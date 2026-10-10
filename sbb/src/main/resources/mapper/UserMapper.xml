@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mysite.sbb.user.mapper.UserMapper">
+
+	<resultMap id="summaryMap" type="com.mysite.sbb.user.dto.UserSummaryRow">
+		<constructor>
+			<idArg column="id" javaType="java.lang.Long" />
+			<arg column="username" javaType="java.lang.String" />
+			<arg column="email" javaType="java.lang.String" />
+			<arg column="question_count" javaType="_long" />
+			<arg column="answer_count" javaType="_long" />
+		</constructor>
+	</resultMap>
+
+	<resultMap id="myQuestionMap" type="com.mysite.sbb.user.dto.MyQuestionDto">
+		<constructor>
+			<idArg column="id" javaType="java.lang.Integer" />
+			<arg column="subject" javaType="java.lang.String" />
+			<arg column="create_date" javaType="java.time.LocalDateTime" />
+			<arg column="answer_count" javaType="_int" />
+		</constructor>
+	</resultMap>
+
+	<resultMap id="myAnswerMap" type="com.mysite.sbb.user.dto.MyAnswerDto">
+		<constructor>
+			<idArg column="id" javaType="java.lang.Integer" />
+			<arg column="content" javaType="java.lang.String" />
+			<arg column="create_date" javaType="java.time.LocalDateTime" />
+			<arg column="question_id" javaType="java.lang.Integer" />
+			<arg column="question_subject" javaType="java.lang.String" />
+		</constructor>
+	</resultMap>
+
+	<!--1.기본 정보 + 개수 -->
+	<select id="findSummaryByUsername" resultMap="summaryMap">
+		SELECT u.id, u.username, u.email,
+		(SELECT COUNT(*) FROM question q WHERE q.author_id = u.id) AS
+		question_count,
+		(SELECT COUNT(*) FROM answer a WHERE a.author_id = u.id) AS answer_count
+		FROM site_user u
+		WHERE u.username = #{username}
+	</select>
+
+
+	<!--2.내가 쓴 최근 글-->
+	<select id="findRecentQuestions" resultMap="myQuestionMap">
+		SELECT q.id, q.subject, q.create_date,
+		(SELECT COUNT(*) FROM answer a WHERE a.question_id = q.id) AS
+		answer_count
+		FROM question q
+		WHERE q.author_id = #{userId}
+		ORDER BY q.id DESC
+		LIMIT #{limit}
+	</select>
+
+	<!--3.내가 쓴 최신 댓글 (달린 글 제목 포함)-->
+	<select id="findRecentAnswers" resultMap="myAnswerMap">
+		SELECT a.id, a.content, a.create_date, q.id AS question_id, q.subject AS
+		question_subject
+		FROM answer a
+		JOIN question q ON a.question_id = q.id
+		WHERE a.author_id = #{userId}
+		ORDER BY a.id DESC
+		LIMIT #{limit}
+	</select>
+</mapper>
+
+
+
