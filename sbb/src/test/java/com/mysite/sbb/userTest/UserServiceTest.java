@@ -2,32 +2,23 @@ package com.mysite.sbb.userTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
+
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mysite.sbb.BaseTest;
 import com.mysite.sbb.jwt.JwtTokenProvider;
 import com.mysite.sbb.user.UserRole;
-import com.mysite.sbb.user.dto.UserCreateRequestDto;
-import com.mysite.sbb.user.dto.UserLoginRequestDto;
 import com.mysite.sbb.user.dto.UserLoginResponseDto;
 import com.mysite.sbb.user.entity.SiteUser;
-import com.mysite.sbb.user.repository.UserRepository;
+
 import com.mysite.sbb.user.service.UserService;
 
 import jakarta.transaction.Transactional;
@@ -95,16 +86,50 @@ public class UserServiceTest extends BaseTest {
 				.isEqualTo(result.getRefreshToken());
 
 	}
-	
+
 	@Test
 	@DisplayName("로그인 실패: 비밀번호 불일치, 없는 사용자 모두 401이고 메시지가 같다.")
 	void loginFail() {
 		assertStatus(() -> userService.login("writer", "wrong"), HttpStatus.UNAUTHORIZED);
 		assertStatus(() -> userService.login("ghost", PASSWORD), HttpStatus.UNAUTHORIZED);
-		
+
 		// 메시지가 다르면 어떤 아이디가 가입돼 있는지 알아낼 수 있다.
 		String wrongPassword = reasonOf(() -> userService.login("writer", "wrong"));
 		String unknowUser = reasonOf(() -> userService.login("ghost", PASSWORD));
 		assertThat(wrongPassword).isEqualTo(unknowUser);
+	}
+
+	// ---------- 재발급 ----------
+	@Test
+	@DisplayName("재발급: 유효한 Refresh Token이면 새 Access Token")
+	void reissue() {
+		UserLoginResponseDto login = userService.login("writer", PASSWORD);
+
+		String newAccess = userService.reissue(login.getRefreshToken());
+
+		assertThat(jwtTokenProvider.isAccessToken(newAccess)).isTrue();
+		assertThat(jwtTokenProvider.getUsernameFromToken(newAccess)).isEqualTo("writer");
+	}
+
+	@Test
+	@DisplayName("재발급 실패: Access Token을 넣거나, 깨진 토큰이면 401")
+	void reissueInvalidToken() {
+		UserLoginResponseDto login = userService.login("writer", PASSWORD);
+
+		assertStatus(() -> userService.reissue(login.getAccessToken()), HttpStatus.UNAUTHORIZED);
+		assertStatus(() -> userService.reissue("garbage.token.value"), HttpStatus.UNAUTHORIZED);
+	}
+
+	@Test
+	@DisplayName("로그아웃 후에는 기존 Refresh Token으로 재발급 불가")
+	void logoutInvalidatesRefreshToken() {
+		UserLoginResponseDto login = userService.login("writer", PASSWORD);
+
+		userService.logout("writer");
+
+		flushAndClear();
+
+		assertThat(userRepository.findByUsername("writer").orElseThrow().getRefreshToken());
+		assertStatus(() -> userService.reissue(login.getRefreshToken()), HttpStatus.UNAUTHORIZED);
 	}
 }
