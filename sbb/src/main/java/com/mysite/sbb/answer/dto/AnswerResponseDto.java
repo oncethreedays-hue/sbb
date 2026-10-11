@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 
 import com.mysite.sbb.answer.entity.Answer;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class AnswerResponseDto {
 
 	private final Integer id;
@@ -17,14 +19,10 @@ public class AnswerResponseDto {
 	private final Integer questionId;
 	private final int voterCount;
 
-	public AnswerResponseDto(Answer answer) {
-		this.id = answer.getId();
-		this.content = answer.getContent();
-		this.createDate = answer.getCreateDate();
-		this.modifyDate = answer.getModifyDate();
-		this.authorUsername = (answer.getAuthor() != null) ? answer.getAuthor().getUsername() : null;
-		this.questionId = (answer.getQuestion() != null) ? answer.getQuestion().getId() : null;
-		this.voterCount = (answer.getVoter() != null) ? answer.getVoter().size() : 0;
+	public static AnswerResponseDto from(Answer answer) {
+		return new AnswerResponseDto(answer.getId(), answer.getContent(), answer.getCreateDate(),
+				answer.getModifyDate(), answer.getAuthor() != null ? answer.getAuthor().getUsername() : null,
+				answer.getQuestion().getId(), answer.getVoter().size());
 
 	}
 }

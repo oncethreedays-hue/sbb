@@ -29,6 +29,6 @@ public class QuestionDetailDto {
 		this.modifyDate = question.getModifyDate();
 		this.authorUsername = ( question.getAuthor() != null ) ? question.getAuthor().getUsername() : null;
 		this.voterCount = ( question.getVoter() != null ) ? question.getVoter().size() : 0;		
-		this.answerList = ( question.getAnswerList() != null) ? question.getAnswerList().stream().map(AnswerResponseDto::new).toList() : Collections.emptyList();
+		this.answerList = ( question.getAnswerList() != null) ? question.getAnswerList().stream().map(AnswerResponseDto::from).toList() : Collections.emptyList();
 	}
 }
