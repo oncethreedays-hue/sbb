@@ -1,16 +1,14 @@
 package com.mysite.sbb.user.service;
 
-import com.mysite.sbb.question.repository.QuestionRepository;
-import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.User;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.mysite.sbb.global.exception.DataNotFoundException;
 import com.mysite.sbb.jwt.JwtTokenProvider;
 import com.mysite.sbb.user.UserRole;
 import com.mysite.sbb.user.dto.UserDetailDto;
@@ -32,17 +30,24 @@ public class UserServiceImpl implements UserService {
 	private final JwtTokenProvider jwtTokenProvider;
 	private static final int RECENT_LIMIT = 5;
 	private final UserMapper userMapper;
+	private static final Set<String> RESERVED_USERNAMES = Set.of("admin", "root", "administrator", "system");
 
 	@Override
 	@Transactional
 	public Long signup(String username, String email, String password) {
+		if (RESERVED_USERNAMES.contains(username.toLowerCase())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "사용할 수 없는 아이디입니다.");
+		}
+
 		if (userRepository.existsByUsername(username)) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 사용 중인 아이디입니다.");
 		}
-		if (userRepository.existsByEmail(email)) {
+		String normalizedEmail = email.trim().toLowerCase();
+		if (userRepository.existsByEmail(normalizedEmail)) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다.");
 		}
-		SiteUser user = new SiteUser(username, passwordEncoder.encode(password), email, UserRole.USER);
+
+		SiteUser user = new SiteUser(username, passwordEncoder.encode(password), normalizedEmail, UserRole.USER);
 		return userRepository.save(user).getId();
 	}
 
@@ -86,8 +91,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDetailDto getMyDetail(String username) {
-		UserSummaryRow s = userMapper.findSummaryByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
-		return new UserDetailDto(s.getUsername(), s.getEmail(), s.getQuestionCount(), s.getAnswerCount(), userMapper.findRecentQuestion(s.getId(), RECENT_LIMIT), userMapper.findRecentAnswer(s.getId(), RECENT_LIMIT));
+		UserSummaryRow s = userMapper.findSummaryByUsername(username)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
+		return new UserDetailDto(s.getUsername(), s.getEmail(), s.getQuestionCount(), s.getAnswerCount(),
+				userMapper.findRecentQuestion(s.getId(), RECENT_LIMIT),
+				userMapper.findRecentAnswer(s.getId(), RECENT_LIMIT));
 	}
 
 }

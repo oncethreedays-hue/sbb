@@ -28,7 +28,7 @@ import jakarta.persistence.EntityManager;
 @Transactional
 public class BaseTest {
 
-	protected static final String PASSWORD = "pw";
+	protected static final String PASSWORD = "123";
 
 	@Autowired
 	protected MockMvc mockMvc;

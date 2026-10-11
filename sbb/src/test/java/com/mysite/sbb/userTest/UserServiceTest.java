@@ -70,6 +70,18 @@ public class UserServiceTest extends BaseTest {
 		assertStatus(() -> userService.signup("another", "writer@test.com", "passw0rd!"), HttpStatus.CONFLICT);
 	}
 
+	@Test
+	@DisplayName("가입: 이메일 대소문자 무관하게 중복 처리되고 소문자로 저장")
+	void signEmailNormalization() throws Exception {
+
+		assertStatus(() -> userService.signup("another", "WRITER@Test.com", "Passw0rd!"), HttpStatus.CONFLICT);
+
+		Long id = userService.signup("newuser", "New@Test.COM", "Passw0rd!");
+		flushAndClear();
+		assertThat(userRepository.findById(id).orElseThrow().getEmail()).isEqualTo("new@test.com");
+
+	}
+
 	// ---------- 로그인 ----------
 	@Test
 	@DisplayName("로그인: 토큰 2종 발급, 용도 구분, Refresh Token DB 저장")

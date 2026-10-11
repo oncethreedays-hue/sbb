@@ -57,7 +57,7 @@ public class SecurityConfig {
 
 				// 6. 요청 경로별 권한 설정
 				.authorizeHttpRequests(auth -> auth.requestMatchers("/h2-console/**", "/error").permitAll()
-						.requestMatchers("/api/user/login", "/api/user/signup", "/api/user/refresh").permitAll()
+						.requestMatchers("/api/user/login", "/api/user/signup", "/api/user/reissue").permitAll()
 						.requestMatchers(HttpMethod.GET, "/api/questions/**").permitAll().anyRequest().authenticated())
 				.exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
 				// 7. UsernamePasswordAuthenticationFilter 전에 커스텀 JwtFilter를 먼저 실행하도록 등록
