@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,6 +41,8 @@ public class BaseTest {
 	protected PasswordEncoder passwordEncoder;
 	@Autowired
 	protected EntityManager em;
+	@Autowired
+	protected SqlSessionTemplate sqlSessionTemplate;
 
 	@BeforeEach
 	protected void baseSetUp() {
@@ -51,6 +54,7 @@ public class BaseTest {
 	protected void flushAndClear() {
 		em.flush();
 		em.clear();
+		sqlSessionTemplate.clearCache();
 
 	}
 

@@ -35,7 +35,7 @@ public class AnswerServiceImpl implements AnswerService {
 	private final UserRepository userRepository;
 
 	@Override
-	public Page<AnswerResponseDto> getList(Integer questionId, int page, String sort) {
+	public Page<AnswerResponseDto>getList(Integer questionId, int page, String sort) {
 		if (!questionRepository.existsById(questionId)) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "question not found");
 

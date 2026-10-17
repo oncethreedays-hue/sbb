@@ -42,8 +42,8 @@ public class AnswerRestController {
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/questions/{questionId}/answers")
 	public ResponseEntity<AnswerResponseDto> createAnswer(@PathVariable("questionId") Integer questionId,
-			@Valid @RequestBody AnswerRequestDto request, Principal pricPrincipal) {
-		AnswerResponseDto created = answerService.create(questionId, request.getContent(), pricPrincipal.getName());
+			@Valid @RequestBody AnswerRequestDto request, Principal prinPrincipal) {
+		AnswerResponseDto created = answerService.create(questionId, request.getContent(), prinPrincipal.getName());
 		return ResponseEntity.status(HttpStatus.CREATED).body(created);
 	}
 
@@ -57,8 +57,8 @@ public class AnswerRestController {
 
 	@PreAuthorize("isAuthenticated()")
 	@DeleteMapping("/answers/{id}")
-	public ResponseEntity<Void> deleteAnswer(@PathVariable("id") Integer id, Principal pricPrincipal) {
-		answerService.delete(id, pricPrincipal.getName());
+	public ResponseEntity<Void> deleteAnswer(@PathVariable("id") Integer id, Principal prinPrincipal) {
+		answerService.delete(id, prinPrincipal.getName());
 		return ResponseEntity.noContent().build();
 	}
 
