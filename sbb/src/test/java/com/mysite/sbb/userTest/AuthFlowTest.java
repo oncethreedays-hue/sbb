@@ -158,21 +158,30 @@ public class AuthFlowTest extends BaseTest {
 		mockMvc.perform(post("/api/user/reissue").contentType(MediaType.APPLICATION_JSON)
 				.content(toJson(Map.of("refreshToken", "")))).andExpect(status().isBadRequest());
 	}
-	
+
 	@Test
 	@DisplayName("로그아웃 후 기존 refresh Token으로 재발급 불가")
 	void logoutThenReissue() throws Exception {
 		Map<String, Object> info = login("writer", PASSWORD);
 		String accessToken = (String) info.get("accessToken");
 		String refreshToken = (String) info.get("refreshToken");
-		
+
 		mockMvc.perform(post("/api/user/logout").header("Authorization", "Bearer " + accessToken))
-		.andExpect(status().isNoContent());
+				.andExpect(status().isNoContent());
 	}
-	
+
 	@Test
 	@DisplayName("토큰 없이 로그아웃하면 401")
 	void logoutWithoutToken() throws Exception {
 		mockMvc.perform(post("/api/user/logout")).andExpect(status().isUnauthorized());
+	}
+
+	@Test
+	@DisplayName("검증 실패 응답ㅣ 400 + 필드별 메시지, 존재하지 않는 경로 에러도 JSON")
+	void errorResponseShape() throws Exception {
+		mockMvc.perform(post("/api/user/signup").contentType(MediaType.APPLICATION_JSON).content(
+				toJson(Map.of("username", "", "email", "x@test.com", "password1", "1234", "password2", "1234"))))
+				.andDo(print()).andExpect(status().isBadRequest()).andExpect(jsonPath("$.status").value(400))
+				.andExpect(jsonPath("$.fieldErrors.username").exists());
 	}
 }
