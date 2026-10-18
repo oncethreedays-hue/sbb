@@ -14,7 +14,7 @@ import com.mysite.sbb.user.dto.UserSummaryRow;
 public interface UserMapper {
 	Optional<UserSummaryRow> findSummaryByUsername(@Param("username") String username);
 
-	List<MyQuestionDto> findRecentQuestion(@Param("userId") Long userId, @Param("limit") int limit);
+	List<MyQuestionDto> findRecentQuestions(@Param("userId") Long userId, @Param("limit") int limit);
 
-	List<MyAnswerDto> findRecentAnswer(@Param("userId") Long userId, @Param("limit") int limit);
+	List<MyAnswerDto> findRecentAnswers(@Param("userId") Long userId, @Param("limit") int limit);
 }
