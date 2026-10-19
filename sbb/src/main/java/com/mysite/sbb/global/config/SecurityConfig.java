@@ -5,6 +5,7 @@ import com.mysite.sbb.jwt.JwtTokenProvider;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -69,8 +70,10 @@ public class SecurityConfig {
 
 	// CORS 설정 빈
 	@Bean
-	public CorsConfigurationSource corsConfigurationSource() {
+	public CorsConfigurationSource corsConfigurationSource(
+			@Value("${app.cors.allowed-origins:http://localhost:5173}") List<String> allowOrigins) {
 		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(allowOrigins);
 		configuration.setAllowedOrigins(List.of("http://localhost:5173")); // 리액트 주소
 		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		configuration.setAllowedHeaders(List.of("*"));
