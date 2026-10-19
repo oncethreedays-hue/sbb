@@ -31,7 +31,10 @@ dependencies {
 	// Web, JPA, H2
 	implementation 'org.springframework.boot:spring-boot-starter-web' // webmvc 대신 표준 starter-web 사용
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' 
-	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	implementation 'org.flywaydb:flyway-core'
+	implementation 'org.flywaydb:flyway-mysql'
+	testRuntimeOnly 'com.h2database:h2' 
 
 	// Devtools
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'

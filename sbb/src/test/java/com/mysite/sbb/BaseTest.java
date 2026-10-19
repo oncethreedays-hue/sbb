@@ -24,7 +24,12 @@ import com.mysite.sbb.user.repository.UserRepository;
 
 import jakarta.persistence.EntityManager;
 
-@SpringBootTest(properties = "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1")
+@SpringBootTest(properties = {
+		"spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1",
+		"spring.flyway.enabled=false",
+		"spring.jpa.hibernate.ddl-auto=create-drop",
+		"jwt.secret=test-secret-key-test-secret-key-test-secret-key-0123456789"
+})
 @AutoConfigureMockMvc
 @Transactional
 public class BaseTest {

@@ -28,7 +28,7 @@ public class UserDetailTest extends BaseTest {
 
 	private SiteUser writer;
 	private SiteUser other;
-	private Question firestQuestion;
+	private Question firstQuestion;
 	private Question lastQuestion;
 
 	@BeforeEach
@@ -40,13 +40,13 @@ public class UserDetailTest extends BaseTest {
 		for (int i = 1; i <= 7; i++) {
 			Question q = questionRepository.save(new Question("질문" + i, "내용" + i, writer));
 			if (i == 1)
-				firestQuestion = q;
+				firstQuestion = q;
 			last = q;
 		}
 		lastQuestion = last;
 
 		for (int i = 1; i <= 6; i++) {
-			answerRepository.save(new Answer("내 답변" + i, firestQuestion, writer));
+			answerRepository.save(new Answer("내 답변" + i, firstQuestion, writer));
 		}
 		answerRepository.save(new Answer("남의 답변1", lastQuestion, other));
 		answerRepository.save(new Answer("남의 답변2", lastQuestion, other));
@@ -79,7 +79,7 @@ public class UserDetailTest extends BaseTest {
 	void recentAnswers() throws Exception {
 		mockMvc.perform(get("/api/user/me").with(user("writer"))).andExpect(jsonPath("$.recentAnswers", hasSize(5)))
 				.andExpect(jsonPath("$.recentAnswers[0].content").value("내 답변6"))
-				.andExpect(jsonPath("$.recentAnswers[0].questionId").value(firestQuestion.getId()))
+				.andExpect(jsonPath("$.recentAnswers[0].questionId").value(firstQuestion.getId()))
 				.andExpect(jsonPath("$.recentAnswers[0].questionSubject").value("질문1"))
 				.andExpect(jsonPath("$.recentAnswers[4].content").value("내 답변2"));
 	}
