@@ -139,7 +139,7 @@ public class AnswerControllerTest extends BaseTest {
 		mockMvc.perform(put("/api/answers/{id}", id).with(user("writer")).contentType(MediaType.APPLICATION_JSON)
 				.content(content("수정 내용"))).andExpect(status().isNoContent());
 
-		mockMvc.perform(put("/api/answers{id}", 99999).with(user("writer")).contentType(MediaType.APPLICATION_JSON)
+		mockMvc.perform(put("/api/answers/{id}", 99999).with(user("writer")).contentType(MediaType.APPLICATION_JSON)
 				.content(content("내용"))).andExpect(status().isNotFound());
 
 		flushAndClear();

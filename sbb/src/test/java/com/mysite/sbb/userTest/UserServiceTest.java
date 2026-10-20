@@ -23,7 +23,12 @@ import com.mysite.sbb.user.service.UserService;
 
 import jakarta.transaction.Transactional;
 
-@SpringBootTest
+@SpringBootTest(properties = {
+        "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1",
+        "spring.flyway.enabled=false",
+        "spring.jpa.hibernate.ddl-auto=create-drop",
+        "jwt.secret=test-secret-key-test-secret-key-test-secret-key-0123456789"
+})
 @AutoConfigureMockMvc
 @Transactional
 public class UserServiceTest extends BaseTest {
@@ -141,7 +146,7 @@ public class UserServiceTest extends BaseTest {
 
 		flushAndClear();
 
-		assertThat(userRepository.findByUsername("writer").orElseThrow().getRefreshToken());
+		assertThat(userRepository.findByUsername("writer").orElseThrow().getRefreshToken()).isNull();
 		assertStatus(() -> userService.reissue(login.getRefreshToken()), HttpStatus.UNAUTHORIZED);
 	}
 }

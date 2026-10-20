@@ -113,7 +113,7 @@ class QuestionRestControllerTest{
 				.andExpect(jsonPath("$.subject").value("제목")).andExpect(jsonPath("$.authorUsername").value("writer"))
 				.andExpect(jsonPath("$.voterCount").value(0)).andExpect(jsonPath("$.answerList", hasSize(0)));
 
-		mockMvc.perform(get("/api/question/{id}", 9999999)).andExpect(status().isNotFound());
+		mockMvc.perform(get("/api/questions/{id}", 9999999)).andExpect(status().isNotFound());
 
 	}
 
