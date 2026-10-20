@@ -1,7 +1,9 @@
 package com.mysite.sbb.jwt;
 
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.ArrayList;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,10 +12,11 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.ArrayList;
-import java.util.Date;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtTokenProvider {
@@ -22,15 +25,16 @@ public class JwtTokenProvider {
 	private static final String TOKEN_TYPE_CLAIM = "type";
 	private static final String ACCESS = "access";
 	private static final String REFRESH = "refresh";
-
 	// accessToken 유효시간: 1시간
 	private static final long ACCESS_TOKEN_VALID_TIME = 1000L * 60 * 60;
 	// refreshToken 유효시간: 2주
 	private static final long REFRESH_TOKEN_VALID_TIME = 1000L * 60 * 60 * 24 * 14;
 
-	public JwtTokenProvider(@Value("${jwt.secret}") String secretKeyString) {
-		byte[] bytes = secretKeyString.getBytes(StandardCharsets.UTF_8);
-		this.key = Keys.hmacShaKeyFor(bytes);
+	public JwtTokenProvider(@Value("${jwt.secret}") String secret) {
+		if (secret == null || secret.getBytes(StandardCharsets.UTF_8).length < 32) {
+			throw new IllegalStateException("JWT_SECRET 환경 변수가 없거나 32바이트 미만입니다.");
+		}
+		this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
 	}
 
 	// 1-1 Access Token 생성
