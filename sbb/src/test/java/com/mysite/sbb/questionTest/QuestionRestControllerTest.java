@@ -8,12 +8,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +36,7 @@ import jakarta.transaction.Transactional;
 @SpringBootTest(properties = { "spring.datasource.url=jdbc:h2:mem:controllertestdb;DB_CLOSE_DELAY=-1" })
 @AutoConfigureMockMvc
 @Transactional
-class QuestionRestControllerTest {
+class QuestionRestControllerTest{
 
 	@Autowired
 	MockMvc mockMvc;

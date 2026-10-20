@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -27,7 +26,7 @@ import jakarta.persistence.EntityManager;
 
 @SpringBootTest(properties = { "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1" })
 @Transactional
-public class QuestionServiceTest {
+public class QuestionServiceTest{
 
 	@Autowired
 	QuestionService questionService;

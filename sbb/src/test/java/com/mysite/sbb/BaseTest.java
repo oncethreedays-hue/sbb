@@ -81,7 +81,7 @@ public class BaseTest {
 	}
 	
 	protected Integer createQuestionAndGetId(String accessToken, String subject, String content) throws Exception {
-		MvcResult result = mockMvc.perform(post("/api/question")
+		MvcResult result = mockMvc.perform(post("/api/questions")
 				.header("Authorization", "Bearer " + accessToken)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(toJson(Map.of("subject", subject, "content", content))))

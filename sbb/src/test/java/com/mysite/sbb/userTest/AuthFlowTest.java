@@ -1,12 +1,9 @@
 package com.mysite.sbb.userTest;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.nio.charset.StandardCharsets;
@@ -18,12 +15,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.mysite.sbb.BaseTest;
@@ -31,7 +27,6 @@ import com.mysite.sbb.BaseTest;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import jakarta.transaction.Transactional;
 
 public class AuthFlowTest extends BaseTest {
 
@@ -168,6 +163,8 @@ public class AuthFlowTest extends BaseTest {
 
 		mockMvc.perform(post("/api/user/logout").header("Authorization", "Bearer " + accessToken))
 				.andExpect(status().isNoContent());
+
+		reissue(refreshToken).andExpect(status().isUnauthorized());
 	}
 
 	@Test
