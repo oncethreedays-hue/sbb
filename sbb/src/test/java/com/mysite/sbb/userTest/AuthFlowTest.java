@@ -61,25 +61,25 @@ public class AuthFlowTest extends BaseTest {
 	@DisplayName("가입 API: 201 후 그 계정으로 로그인 가능")
 	void signupThenLogin() throws Exception {
 		mockMvc.perform(post("/api/user/signup").contentType(MediaType.APPLICATION_JSON).content(
-				toJson(Map.of("username", "newuser", "email", "new@test.com", "password1", "123", "password2", "123"))))
+				toJson(Map.of("username", "newuser", "email", "new@test.com", "password1", "12345678", "password2", "12345678"))))
 				.andExpect(status().isCreated());
 
-		login("newuser", "123");
+		login("newuser", "12345678");
 	}
 
 	@Test
 	@DisplayName("가입 API: 아이디 중복 409, 비밀번호 불일치 400, 빈 아이디 400")
 	void signupFail() throws Exception {
 		mockMvc.perform(post("/api/user/signup").contentType(MediaType.APPLICATION_JSON).content(
-				toJson(Map.of("username", "writer", "email", "x@test.com", "password1", "123", "password2", "123"))))
+				toJson(Map.of("username", "writer", "email", "x@test.com", "password1", "12345678", "password2", "12345678"))))
 				.andExpect(status().isConflict());
 
 		mockMvc.perform(post("/api/user/signup").contentType(MediaType.APPLICATION_JSON).content(
-				toJson(Map.of("username", "newuser", "email", "new@test.com", "password1", "123", "password2", "456"))))
+				toJson(Map.of("username", "newuser", "email", "new@test.com", "password1", "12345678", "password2", "456"))))
 				.andExpect(status().isBadRequest());
 
 		mockMvc.perform(post("/api/user/signup").contentType(MediaType.APPLICATION_JSON).content(
-				toJson(Map.of("username", "", "email", "new@test.com", "password1", "123", "password2", "123"))))
+				toJson(Map.of("username", "", "email", "new@test.com", "password1", "12345678", "password2", "12345678"))))
 				.andExpect(status().isBadRequest());
 	}
 
@@ -90,7 +90,7 @@ public class AuthFlowTest extends BaseTest {
 		mockMvc.perform(post("/api/user/login").contentType(MediaType.APPLICATION_JSON)
 				.content(toJson(Map.of("username", "writer", "password", PASSWORD)))).andExpect(status().isOk())
 				.andExpect(jsonPath("$.accessToken", notNullValue()))
-				.andExpect(jsonPath(".refreshToken", notNullValue())).andExpect(jsonPath("$.username").value("writer"));
+				.andExpect(jsonPath("$.refreshToken", notNullValue())).andExpect(jsonPath("$.username").value("writer"));
 
 		mockMvc.perform(post("/api/user/login").contentType(MediaType.APPLICATION_JSON)
 				.content(toJson(Map.of("username", "writer", "password", "wrong"))))
